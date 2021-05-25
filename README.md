@@ -20,7 +20,7 @@ sudo apt install nodejs
 sudo apt install npm
 ```
 
-*Windows:
+* Windows:
 ```
 Descargar ejecutable en https://nodejs.org/en/download/
 ```
