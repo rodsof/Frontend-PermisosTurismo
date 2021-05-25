@@ -127,16 +127,16 @@ const PermisosProvider = (props) => {
         var domicilioExiste = await getDomicilio(permiso);
         console.log(ciudadanoExiste);
         console.log(domicilioExiste)
-        var linkCiudadano, linkdomicilio;
+        var linkCiudadano, linkDomicilio;
         try {
         if (ciudadanoExiste.data.data[0])
             linkCiudadano = ciudadanoExiste.data.data[0].links.self;
         else
             linkCiudadano = ciudadanoExiste.data.data.links.self;
         if (domicilioExiste.data.data.links.self)
-            linkdomicilio = domicilioExiste.data.data.links.self;
+            linkDomicilio = domicilioExiste.data.data.links.self;
         } catch(error){
-            console.log(error + "en linea 139")
+            
         }
 
             try {
@@ -149,13 +149,13 @@ const PermisosProvider = (props) => {
                             "fecha": permiso.fechaIngreso,
                             "evento": permiso.evento,
                             "ciudadano": linkCiudadano,
-                            "domicilio": domicilioExiste.data.data.links.self
+                            "domicilio": linkDomicilio
                         }
                     }
                 }
                 const results = await axiosClient.post(urlPermisos, permisoData);
                 setExito("Permiso generado con éxito. Código: " + results.data.data.id + " Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
-                    "Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
+                    " Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
                 setError(null);
                 savePermisos(...permisos, results);
             }
