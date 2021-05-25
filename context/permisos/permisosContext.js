@@ -127,35 +127,42 @@ const PermisosProvider = (props) => {
         var domicilioExiste = await getDomicilio(permiso);
         console.log(ciudadanoExiste);
         console.log(domicilioExiste)
-        var linkCiudadano;
+        var linkCiudadan, linkdomicilio;
+        try {
         if (ciudadanoExiste.data.data[0])
             linkCiudadano = ciudadanoExiste.data.data[0].links.self;
         else
             linkCiudadano = ciudadanoExiste.data.data.links.self;
-        try {
-            const permisoData = {
-                "data": {
-                    "type": "Permiso",
-                    "id": null,
-                    "attributes": {
-                        "codigoPermiso": null,
-                        "fecha": permiso.fechaIngreso,
-                        "evento": permiso.evento,
-                        "ciudadano": linkCiudadano,
-                        "domicilio": domicilioExiste.data.data.links.self
+        if (domicilioExiste.data.data.links.self)
+            linkdomicilio = domicilioExiste.data.data.links.self;
+        } catch(error){
+            console.log(error)
+        }
+
+            try {
+                const permisoData = {
+                    "data": {
+                        "type": "Permiso",
+                        "id": null,
+                        "attributes": {
+                            "codigoPermiso": null,
+                            "fecha": permiso.fechaIngreso,
+                            "evento": permiso.evento,
+                            "ciudadano": linkCiudadano,
+                            "domicilio": domicilioExiste.data.data.links.self
+                        }
                     }
                 }
+                const results = await axiosClient.post(urlPermisos, permisoData);
+                setExito("Permiso generado con éxito. <br/> Código: " + results.data.data.id + " <br/> Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
+                    "<br/> Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
+                setError(null);
+                savePermisos(...permisos, results);
             }
-            const results = await axiosClient.post(urlPermisos, permisoData);
-            setExito("Permiso generado con éxito. <br/> Código: " + results.data.data.id + " <br/> Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
-                "<br/> Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
-            setError(null);
-            savePermisos(...permisos, results);
-        }
-        catch (error) {
-            console.log(error)
-            setError("Hubo un error! Revise los datos de su inscripción")
-        }
+            catch (error) {
+                console.log(error)
+                setError("Hubo un error! Revise los datos de su inscripción")
+            }
 
     }
 
