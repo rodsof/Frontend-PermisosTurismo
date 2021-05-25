@@ -20,34 +20,31 @@ const PermisosProvider = (props) => {
         try {
             const nroDoc = permiso.dni;
             ciudadanoExiste = await axiosClient.get(urlCiudadanos, { params: { nroDoc } });
-        } catch (error) {
-            setError("Hubo un error, intente de nuevo por favor")
-        }
 
-        if (ciudadanoExiste.data.data.length == 0) {
-            const ciudadanoData = {
-                "data": {
-                    "type": "Ciudadano",
-                    "id": null,
-                    "attributes": {
-                        "cuil": permiso.dni,
-                        "nombre": permiso.nombre,
-                        "apellido": permiso.apellido,
-                        "nroDoc": permiso.dni,
-                        "nroTramite": permiso.nroTramite,
-                        "telefono": permiso.celular,
-                        "email": permiso.email,
-                        "extranjero": permiso.extranjero,
-                        "sexo": permiso.genero
+
+            if (ciudadanoExiste.data.data.length == 0) {
+                const ciudadanoData = {
+                    "data": {
+                        "type": "Ciudadano",
+                        "id": null,
+                        "attributes": {
+                            "cuil": permiso.dni,
+                            "nombre": permiso.nombre,
+                            "apellido": permiso.apellido,
+                            "nroDoc": permiso.dni,
+                            "nroTramite": permiso.nroTramite,
+                            "telefono": permiso.celular,
+                            "email": permiso.email,
+                            "extranjero": permiso.extranjero,
+                            "sexo": permiso.genero
+                        }
                     }
                 }
-            }
-            try {
                 ciudadanoExiste = await axiosClient.post(urlCiudadanos, ciudadanoData)
+
             }
-            catch (error) {
-                setError("Hubo un error, intente de nuevo por favor")
-            }
+        } catch (error) {
+            setError("Hubo un error, intente de nuevo por favor")
         }
         return ciudadanoExiste;
     }
@@ -86,34 +83,35 @@ const PermisosProvider = (props) => {
             } */
 
         //if (domicilioExiste.data.data.length == 0){
-        const localidad = await getLocalidad(permiso.localidad);
-        const latLocalidad = localidad.centroide.lat;
-        const lonLocalidad = localidad.centroide.lon;
+        try {
+            const localidad = await getLocalidad(permiso.localidad);
+            const latLocalidad = localidad.centroide.lat;
+            const lonLocalidad = localidad.centroide.lon;
 
-        const domicilioData = {
-            "data": {
-                "type": "Domicilio",
-                "id": null,
-                "attributes": {
-                    idProvincia: permiso.provincia,
-                    idDepartamento: permiso.departamento,
-                    idLocalidad: permiso.localidad,
-                    latLocalidad: latLocalidad,
-                    longLocalidad: lonLocalidad,
-                    calle: permiso.calle,
-                    nro: permiso.numero,
-                    piso: permiso.piso,
-                    depto: permiso.depto
+            const domicilioData = {
+                "data": {
+                    "type": "Domicilio",
+                    "id": null,
+                    "attributes": {
+                        idProvincia: permiso.provincia,
+                        idDepartamento: permiso.departamento,
+                        idLocalidad: permiso.localidad,
+                        latLocalidad: latLocalidad,
+                        longLocalidad: lonLocalidad,
+                        calle: permiso.calle,
+                        nro: permiso.numero,
+                        piso: permiso.piso,
+                        depto: permiso.depto
+                    }
                 }
             }
-        }
-        try {
             domicilioExiste = await axiosClient.post(urlDomicilios, domicilioData)
         }
         catch (error) {
+            setSpinner(null)
             setError("Hubo un error, intente de nuevo por favor")
         }
-        //}
+
         return domicilioExiste;
     }
 
@@ -123,46 +121,46 @@ const PermisosProvider = (props) => {
         setExito(null)
         setError(null);
         var urlPermisos = "/permisos/";
-
-        var ciudadanoExiste = await getCiudadano(permiso);
-        var domicilioExiste = await getDomicilio(permiso);
-
-        var linkCiudadano, linkDomicilio;
         try {
-        if (ciudadanoExiste.data.data[0])
-            linkCiudadano = ciudadanoExiste.data.data[0].links.self;
-        else
-            linkCiudadano = ciudadanoExiste.data.data.links.self;
-        if (domicilioExiste.data.data.links.self)
-            linkDomicilio = domicilioExiste.data.data.links.self;
-        } catch(error){
-            
+            var ciudadanoExiste = await getCiudadano(permiso);
+            var domicilioExiste = await getDomicilio(permiso);
+
+            var linkCiudadano, linkDomicilio;
+            if (ciudadanoExiste.data.data[0])
+                linkCiudadano = ciudadanoExiste.data.data[0].links.self;
+            else
+                linkCiudadano = ciudadanoExiste.data.data.links.self;
+            if (domicilioExiste.data.data.links.self)
+                linkDomicilio = domicilioExiste.data.data.links.self;
+        } catch (error) {
+
         }
 
-            try {
-                const permisoData = {
-                    "data": {
-                        "type": "Permiso",
-                        "id": null,
-                        "attributes": {
-                            "codigoPermiso": null,
-                            "fecha": permiso.fechaIngreso,
-                            "evento": permiso.evento,
-                            "ciudadano": linkCiudadano,
-                            "domicilio": linkDomicilio
-                        }
+        try {
+            const permisoData = {
+                "data": {
+                    "type": "Permiso",
+                    "id": null,
+                    "attributes": {
+                        "codigoPermiso": null,
+                        "fecha": permiso.fechaIngreso,
+                        "evento": permiso.evento,
+                        "ciudadano": linkCiudadano,
+                        "domicilio": linkDomicilio
                     }
                 }
-                const results = await axiosClient.post(urlPermisos, permisoData);
-                setExito("Permiso generado con éxito. Código: " + results.data.data.id + " Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
-                    " Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
-                setError(null);
-                setSpinner(null)
             }
-            catch (error) {
-                console.log(error)
-                setError("Hubo un error! Revise los datos de su inscripción")
-            }
+            const results = await axiosClient.post(urlPermisos, permisoData);
+            setExito("Permiso generado con éxito. Código: " + results.data.data.id + " Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
+                " Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
+            setError(null);
+            setSpinner(null)
+        }
+        catch (error) {
+            console.log(error)
+            setSpinner(null)
+            setError("Hubo un error! Revise los datos de su inscripción")
+        }
 
     }
 

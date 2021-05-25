@@ -85,6 +85,7 @@ const admin = () => {
             { permisosFiltrados ?
                 permisosFiltrados.length > 0 ?
                     <>
+                    <div className="row"><div className="col-sm-12">Haga click sobre los marcadores para conocer la cantidad de permisos tramitados en cada localidad</div></div>
                         <Mapa permisos={permisosFiltrados} />
                     </>
                     : <div className="row"><div className="col-sm-12">No hay permisos para ese evento en la fecha indicada</div></div>
