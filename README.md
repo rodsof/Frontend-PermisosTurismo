@@ -1,34 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend-PermisosTurismo
 
-## Getting Started
+Hola! Este repositorio contiene el código del Frontend desarrollado para resolver la consigna del Tema 2 del Primer Parcial de Sistemas Distribuidos II. Este es un proyecto de [Next.js] (https://nextjs.org/) iniciado con [`create-next-app`] (https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-First, run the development server:
+## Comenzando 🚀
 
-```bash
-npm run dev
-# or
-yarn dev
+Estas instrucciones permiten obtener una copia del proyecto desarollado usando Next js en funcionamiento en su máquina.
+
+
+Entrar a **https://frontend-permisos-turismo.vercel.app/** para visitar el deploy del proyecto.
+
+
+### Pre-requisitos 📋
+
+¿Qué cosas se necesitan para poder ejecutar el servidor de Next js?
+
+* Ubuntu:
+```
+sudo apt install nodejs
+sudo apt install npm
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*Windows:
+```
+Descargar ejecutable en https://nodejs.org/en/download/
+```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Dependencias del proyecto:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```
+    fortawesome/fontawesome-svg-core
+    fortawesome/free-brands-svg-icons
+    fortawesome/react-fontawesome
+    axios
+    bootstrap
+    formik
+    google-maps-react
+    next
+    react
+    react-dom
+    yup
+```
+Estas dependencias de npm podrán ser instaladas con una sola línea de comando luego de clonar el proyecto.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+npm install
+```
 
-## Learn More
+### Instalación 🔧
 
-To learn more about Next.js, take a look at the following resources:
+Clonar el repositorio desde Github
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+git clone https://github.com/rodsof/Frontend-PermisosTurismo.git
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Instalar todas las dependencias
 
-## Deploy on Vercel
+```
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Ejecutar el servidor ⚙️
+```
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Se podrá acceder al servidor acciendo a http://localhost:3000 en el navegador
+
+## Construido con 🛠️
+
+* [Next.js ](https://www.djangoproject.com/) - Framework para desarrollo Frontend de React
+* [Vercel](https://vercel.com/) - Plataforma para deployment
+* [npm](https://www.npmjs.com/) -  Manejador de dependencias
+* [Bootstrap 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/) - Framework CSS para el diseño responsive del sitio
+
+
+## Alumna 👧
+
+* **Sofía Rodríguez** - [rodsof](https://github.com/rodsof)
+
+
+## Links relacionados 🔖
+* Código Backend: https://github.com/rodsof/Frontend-PermisosTurismo.git
+* Acceso a la API: http://permisosturismo.herokuapp.com/
+
+
+
+
