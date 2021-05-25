@@ -7,7 +7,7 @@ export const PermisosContext = createContext();
 const PermisosProvider = (props) => {
 
 
-    const [spinner, setSpinner] = useState(null);
+    const [spinnerPermisos, setSpinner] = useState(null);
     const [permisos, savePermisos] = useState([]);
     const [errorPermisos, setError] = useState(null);
     const [permisosFiltrados, savePermisosFiltrados] = useState(null);
@@ -119,9 +119,10 @@ const PermisosProvider = (props) => {
 
 
     const agregarPermiso = async permiso => {
-        var urlPermisos = "/permisos/";
+        setSpinner(true)
+        setExito(null)
         setError(null);
-        setSpinner(true);
+        var urlPermisos = "/permisos/";
 
         var ciudadanoExiste = await getCiudadano(permiso);
         var domicilioExiste = await getDomicilio(permiso);
@@ -156,7 +157,7 @@ const PermisosProvider = (props) => {
                 setExito("Permiso generado con éxito. Código: " + results.data.data.id + " Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
                     " Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
                 setError(null);
-                savePermisos(...permisos, results);
+                setSpinner(null)
             }
             catch (error) {
                 console.log(error)
@@ -210,7 +211,7 @@ const PermisosProvider = (props) => {
                 permisos,
                 permisosFiltrados,
                 errorPermisos,
-                spinner,
+                spinnerPermisos,
                 exito,
                 agregarPermiso,
                 filtrarPermisos

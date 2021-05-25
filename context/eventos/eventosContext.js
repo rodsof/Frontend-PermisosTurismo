@@ -8,7 +8,7 @@ const EventosProvider = (props) => {
     const [spinner, setSpinner] = useState(null);
     const [eventos, saveEventos] = useState([]);
     const [errorEventos, setError] = useState(null);
-    
+
     useEffect(() => {
         const getEventos = async () => {
             setError(null);
@@ -16,7 +16,7 @@ const EventosProvider = (props) => {
             try {
                 const results = await axiosClient.get(url);
                 var status = results.request.status;
-                if ( status != 200) {
+                if (status != 200) {
                     saveEventos(null);
                     setError("Hubo un error")
                 }
@@ -29,7 +29,13 @@ const EventosProvider = (props) => {
                         res[i].attributes.id = res[i].id;
                         res[i].attributes.link = res[i].links.self;
                         arrayAuxiliar.push(res[i].attributes);
-                    }                    saveEventos(arrayAuxiliar);
+                    } 
+                    arrayAuxiliar.sort(function(a, b) {
+                        if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1;
+                        if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1;
+                        return 0;
+                       })
+                    saveEventos(arrayAuxiliar);
                 }
 
             } catch (error) {

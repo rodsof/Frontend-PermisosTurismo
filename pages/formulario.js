@@ -19,7 +19,7 @@ const formulario = () => {
   const { provincias, localidades, departamentos, getLocalidades, getDepartamentos, spinner } = geografiaContext;
   // Define el context de permisos
   const permisosContext = useContext(PermisosContext);
-  const { errorPermisos, agregarPermiso, exito } = permisosContext;
+  const { errorPermisos, agregarPermiso, exito, spinnerPermisos } = permisosContext;
   // Cambio de provincia
   const cambioProvincia = (e) => {
     getDepartamentos(e.target.value);
@@ -57,8 +57,12 @@ const formulario = () => {
       email: Yup.string().email(),
       fechaIngreso: Yup.date().min(hoy, `Seleccione una fecha a partir del ${formatDate(hoy)}`)
     }),
-    onSubmit: (data) => {
+    onSubmit: (data, resetForm) => {
       agregarPermiso(data);
+      if (exito) {
+        console.log(exito)
+        resetForm();
+      }
     },
   });
 
@@ -472,20 +476,24 @@ const formulario = () => {
         <Advertencia advertencia="Por el presente manifiesto que los visitantes incluidos en la presente solicitud no poseemos síntomas de COVID-19" />
         {/* Fin Advertencias */}
         <div className="row" style={{ marginTop: "35px", marginBottom: "35px" }}>
-          <div className="col-sm-12" style={{ textAlign: "center" }}>
-            <input
-              type="submit"
-              className="btn btn-success btn-lg"
-              value="Registrar"
-            />
-           
-          </div>
-          {errorPermisos ? <Error error={errorPermisos} /> 
-            : 
-            exito ?
-            <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}> <span className="exito"><FontAwesomeIcon icon={faCheck} /> {exito}</span></div></div>
-            : null
-            }
+          {!exito && !spinnerPermisos ? <>
+            <div className="col-sm-12" style={{ textAlign: "center" }}>
+              <input
+                type="submit"
+                className="btn btn-success btn-lg"
+                value="Registrar"
+              />
+            </div>
+          </>
+            :
+            exito && !spinnerPermisos ?
+              <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}> <span className="exito"><FontAwesomeIcon icon={faCheck} /> {exito}</span></div></div>
+              :
+              spinnerPermisos ? <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}><div className="spinner-border text-light" role="status">  <span className="sr-only">Loading...</span></div></div></div>
+                :
+                errorPermisos ? <Error error={errorPermisos} /> : null
+
+          }
         </div>
       </form>
     </section >

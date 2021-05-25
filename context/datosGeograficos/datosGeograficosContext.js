@@ -30,6 +30,14 @@ const GeografiaProvider = (props) => {
                 for (var i = 1; i < results.data.cantidad; i++) {
                     arrayAuxiliar.push(results.data.departamentos[i]);
                 }
+                arrayAuxiliar.sort((a,b) => { // Ordenar los resultados por alfabeto para que sea más fácil encontrar la opción deseada
+                    return a.name > b.name;
+                });
+                arrayAuxiliar.sort(function(a, b) {
+                    if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1;
+                    if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1;
+                    return 0;
+                   })
                 saveDepartamentos(arrayAuxiliar);
             }
         } catch (error) {
@@ -54,6 +62,14 @@ const GeografiaProvider = (props) => {
                 for (var i = 1; i < results.data.cantidad; i++) {
                     arrayAuxiliar.push(results.data.localidades[i]);
                 }
+                arrayAuxiliar.sort((a,b) => { // Ordenar los resultados por alfabeto para que sea más fácil encontrar la opción deseada
+                    return a.name > b.name;
+                });
+                arrayAuxiliar.sort(function(a, b) {
+                    if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1;
+                    if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1;
+                    return 0;
+                   })
                 saveLocalidades(arrayAuxiliar);
             }
         } catch (error) {
@@ -100,6 +116,12 @@ const GeografiaProvider = (props) => {
                     for (var i = 1; i < results.data.cantidad; i++) {
                         arrayAuxiliar.push(results.data.provincias[i]);
                     }
+       // Ordenar los resultados por alfabeto para que sea más fácil encontrar la opción deseada
+                        arrayAuxiliar.sort(function(a, b) {
+                            if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1;
+                            if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1;
+                            return 0;
+                           })
                     saveProvincias(arrayAuxiliar);
                 }
             } catch (error) {
