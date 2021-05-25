@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: "http://permisosturismo.herokuapp.com/",
+    baseURL: "https://permisosturismo.herokuapp.com/",
     headers: { 'Content-Type': 'application/vnd.api+json' }
 });
 
