@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useContext, useState } from 'react';
+import React, { useContext  } from 'react';
 import Error from '../components/Error';
 import Mapa from "../components/Mapa";
 import { EventosContext } from '../context/eventos/eventosContext';

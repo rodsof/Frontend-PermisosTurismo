@@ -125,8 +125,7 @@ const PermisosProvider = (props) => {
 
         var ciudadanoExiste = await getCiudadano(permiso);
         var domicilioExiste = await getDomicilio(permiso);
-        console.log(ciudadanoExiste);
-        console.log(domicilioExiste)
+
         var linkCiudadano, linkDomicilio;
         try {
         if (ciudadanoExiste.data.data[0])
