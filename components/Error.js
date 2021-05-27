@@ -6,7 +6,7 @@ const Error = ({ error }) => {
     return (
         <div className="error">
             <FontAwesomeIcon icon={faTimesCircle} />
- Error: {error}
+           Error: {error}
         </div>
     )
 }

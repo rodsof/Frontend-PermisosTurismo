@@ -11,12 +11,13 @@ const GeografiaProvider = (props) => {
     const [departamentos, saveDepartamentos] = useState([]);
     const [localidades, saveLocalidades] = useState([]);
     const [localidad, saveLocalidad] = useState(null); 
+    const [direcciones, saveDirecciones] = useState(null);
     // Para consumir en componente Map
     const [locations, saveLocations] = useState(null)
 
     const getDepartamentos = async (idProvincia) => {
         setSpinner(true);
-        var url = "https://apis.datos.gob.ar/georef/api/departamentos?provincia=" + idProvincia;
+        var url = "https://apis.datos.gob.ar/georef/api/departamentos?provincia=" + idProvincia +"&max=100";
         try {
             const results = await axios.get(url);
             setSpinner(false);
@@ -48,7 +49,7 @@ const GeografiaProvider = (props) => {
     // Obtener localidades por departamento
     const getLocalidades = async (idDepartamento) => {
         setSpinner(true);
-        var url = "https://apis.datos.gob.ar/georef/api/localidades?departamento=" + idDepartamento;
+        var url = "https://apis.datos.gob.ar/georef/api/localidades?departamento=" + idDepartamento +"&max=100";
         try {
             const results = await axios.get(url);
             setSpinner(false);
@@ -77,6 +78,37 @@ const GeografiaProvider = (props) => {
         }
     }
 
+    // Obtener calles por localidad --> hay localidades que no tienen ninguna calle cargada
+    const getDirecciones = async(nombreLocalidad) => {
+        setSpinner(true);
+        var url = "https://apis.datos.gob.ar/georef/api/calles?localidad_censal=" + nombreLocalidad+"&max=5000";
+        try {
+            const results = await axios.get(url);
+            setSpinner(false);
+            if (results.data.errores) {
+                saveDirecciones(null);
+                setError("Hubo un error")
+            }
+            else {
+                var arrayAuxiliar = [];
+
+                for (var i = 1; i < results.data.cantidad; i++) {
+                    arrayAuxiliar.push(results.data.localidades[i]);
+                }
+                arrayAuxiliar.sort((a,b) => { // Ordenar los resultados por alfabeto para que sea más fácil encontrar la opción deseada
+                    return a.name > b.name;
+                });
+                arrayAuxiliar.sort(function(a, b) {
+                    if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1;
+                    if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1;
+                    return 0;
+                   })
+                saveDirecciones(arrayAuxiliar);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     // Función para obtener el nombre de las localidades por evento
     const getLocations= async (permisos) => {
         saveLocalidades(null);
@@ -94,7 +126,6 @@ const GeografiaProvider = (props) => {
         try {
             const results = await axios.get(url);
             setSpinner(false);
-            console.log(results.data.data)
         } catch (error) {
             console.log(error);
         }
@@ -137,10 +168,12 @@ const GeografiaProvider = (props) => {
                 provincias,
                 departamentos,
                 localidades,
+                direcciones,
                 locations,
                 localidad,
                 error,
                 spinner,
+                getDirecciones,
                 getLocalidades,
                 getLocations,
                 getLocalidad,

@@ -1,5 +1,7 @@
+import { faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFormik } from "formik";
-import React, { useContext  } from 'react';
+import React, { useContext } from 'react';
 import Error from '../components/Error';
 import Mapa from "../components/Mapa";
 import { EventosContext } from '../context/eventos/eventosContext';
@@ -12,7 +14,7 @@ const admin = () => {
 
     // Defino contect de permisos
     const permisosContext = useContext(PermisosContext)
-    const { permisosFiltrados, filtrarPermisos } = permisosContext;
+    const { permisosFiltrados, filtrarPermisos, spinnerPermisos } = permisosContext;
 
     // Validación del formulario usando formik y yup
     const formik = useFormik({
@@ -43,8 +45,6 @@ const admin = () => {
                             className="form-select"
                             id="evento"
                             defaultValue="default"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
                         >
                             <option value="default" disabled>Seleccione</option>
                             {eventos.map((evento) =>
@@ -70,8 +70,6 @@ const admin = () => {
                             type="date"
                             className="form-control"
                             id="fecha"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
                         />
 
                     </div>
@@ -82,15 +80,19 @@ const admin = () => {
                     </div>
                 </div>
             </form>
+            { spinnerPermisos && !permisosFiltrados ?
+                <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}><div className="spinner-border text-light" role="status">  <span className="sr-only">Loading...</span></div></div></div>
+                : null
+            }
             { permisosFiltrados ?
                 permisosFiltrados.length > 0 ?
                     <>
-                    <div className="row"><div className="col-sm-12">Haga click sobre los marcadores para conocer la cantidad de permisos tramitados en cada localidad</div></div>
+                        <div className="row"><div className="col-sm-12" style={{ textAlign: "center", marginBottom: ".5rem" }}><span> <FontAwesomeIcon icon={faMapMarkerAlt} color="red"/> Haga click sobre los marcadores para conocer la cantidad de permisos tramitados en cada localidad</span></div></div>
                         <Mapa permisos={permisosFiltrados} />
                     </>
-                    : <div className="row"><div className="col-sm-12">No hay permisos para ese evento en la fecha indicada</div></div>
+                    : <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}><span>No hay permisos para ese evento en la fecha indicada</span></div></div>
                 : null}
-            <div id="map" style={{ boxShadow: "0 .5rem 1rem rgba(0,0,0,.15)",width: "100%", height: "700px", display: permisosFiltrados && permisosFiltrados.length > 0 ? 'block' : 'none'}}></div>
+            <div id="map" style={{ boxShadow: "0 .5rem 1rem rgba(0,0,0,.15)", width: "100%", height: "700px", display: permisosFiltrados && permisosFiltrados.length > 0 ? 'block' : 'none' }}></div>
 
         </div>
 

@@ -16,29 +16,38 @@ const formulario = () => {
   const { errorEventos, eventos } = eventosContext;
   // Defino el context de geografía
   const geografiaContext = useContext(GeografiaContext);
-  const { provincias, localidades, departamentos, getLocalidades, getDepartamentos, spinner } = geografiaContext;
+  const { provincias, localidades, departamentos, getLocalidades, getDepartamentos, spinner, direcciones, getDirecciones } = geografiaContext;
   // Define el context de permisos
   const permisosContext = useContext(PermisosContext);
   const { errorPermisos, agregarPermiso, exito, spinnerPermisos } = permisosContext;
-  // Cambio de provincia
-  const cambioProvincia = (e) => {
-    getDepartamentos(e.target.value);
-  }
+
   // Para usar en validación de yup
   const hoy = new Date();
   function formatDate(date) {
     return new Date(date).toLocaleDateString()
   }
 
+  // Expresion regular telefono
+  const celularRegExp = /^(?:(?:00)?549?)?0?(?:11|[2368]\d)(?:(?=\d{0,2}15)\d{2})??\d{8}$/
+
+  // Cambio de provincia
+  const cambioProvincia = (e) => {
+    getDepartamentos(e.target.value);
+  }
   // Cambio de departamento
   const cambioDepartamento = (e) => {
     getLocalidades(e.target.value);
   }
-
+  // Cambio de localidad
+  const cambioLocalidad = (e) => {
+    getDirecciones(e.target.value);
+    console.log(direcciones)
+  }
   // Validación del formulario usando formik y yup
   const formik = useFormik({
     initialValues: {
       dni: "",
+      cuil: "",
       nroTramite: "",
       nombre: "",
       apellido: "",
@@ -48,14 +57,17 @@ const formulario = () => {
       piso: "",
       depto: "",
       celular: "",
+      email: ""
     },
     validationSchema: Yup.object({
       dni: Yup.string().required("Por favor ingrese su DNI"),
+      cuil: Yup.string().required("Por favor ingrese su número de cuil"),
       nroTramite: Yup.string().required("Por favor ingrese el número de trámite"),
       nombre: Yup.string().required("Por favor ingrese su nombre"),
       apellido: Yup.string().required("Por favor ingrese su apellido"),
-      email: Yup.string().email(),
-      fechaIngreso: Yup.date().min(hoy, `Seleccione una fecha a partir del ${formatDate(hoy)}`)
+      email: Yup.string().email("El email no es válido"),
+      fechaIngreso: Yup.date().min(hoy, `Seleccione una fecha a partir del ${formatDate(hoy)}`),
+      celular: Yup.string().matches(celularRegExp, "El número de teléfono es incorrecto. Ejemplo: 2302457415")
     }),
     onSubmit: (data, resetForm) => {
       agregarPermiso(data);
@@ -82,7 +94,7 @@ const formulario = () => {
         </div>
         {/* Datos identificacion */}
         <div className="row">
-          <div className="col-sm-3">
+          <div className="col-sm-2">
             <label
               className="form-label"
               htmlFor="DNI"
@@ -122,7 +134,7 @@ const formulario = () => {
             ) : null}
           </div>
 
-          <div className="col-sm-3">
+          <div className="col-sm-2">
             <label
               className="form-label"
               htmlFor="extranjero"
@@ -142,7 +154,7 @@ const formulario = () => {
             </select>
           </div>
 
-          <div className="col-sm-3">
+          <div className="col-sm-2">
             <label
               className="form-label"
               htmlFor="genero"
@@ -162,6 +174,25 @@ const formulario = () => {
             </select>
           </div>
 
+          <div className="col-sm-3">
+            <label
+              className="form-label"
+              htmlFor="DNI"
+            >
+              Cuil:
+                </label>
+            <input
+              type="text"
+              className="form-control"
+              id="cuil"
+              value={formik.values.cuil}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.cuil && formik.errors.cuil ? (
+              <Error error={formik.errors.cuil} />
+            ) : null}
+          </div>
 
         </div>
         {/* Fin Datos identificacion */}
@@ -197,6 +228,7 @@ const formulario = () => {
                 type="text"
                 className="form-control"
                 id="nombre"
+                value={formik.values.nombre}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur} />
               {formik.touched.nombre && formik.errors.nombre ? (
@@ -209,6 +241,7 @@ const formulario = () => {
               <input type="text"
                 className="form-control"
                 id="apellido"
+                value={formik.values.apellido}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur} />
               {formik.touched.apellido && formik.errors.apellido ? (
@@ -226,15 +259,25 @@ const formulario = () => {
               <label className="control-label">Celular:</label>
               <input type="text" className="form-control"
                 id="celular"
+                value={formik.values.celular}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur} />
+              {formik.touched.celular && formik.errors.celular ? (
+                <Error error={formik.errors.celular} />
+
+              ) : null}
 
             </div>
             <div className="col-sm-4">
               <label className="control-label">Email:</label>
               <input type="text" className="form-control" id="email"
+                value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur} />
+              {formik.touched.email && formik.errors.email ? (
+                <Error error={formik.errors.email} />
+
+              ) : null}
 
             </div>
           </div>
@@ -371,7 +414,7 @@ const formulario = () => {
             <select
               className="form-select"
               id="localidad"
-              onChange={formik.handleChange}
+              onChange={(e) => { formik.handleChange(e) }}
               onBlur={formik.handleBlur}
               defaultValue="default"
             >
@@ -476,7 +519,7 @@ const formulario = () => {
         <Advertencia advertencia="Por el presente manifiesto que los visitantes incluidos en la presente solicitud no poseemos síntomas de COVID-19" />
         {/* Fin Advertencias */}
         <div className="row" style={{ marginTop: "35px", marginBottom: "35px" }}>
-          {!exito && !spinnerPermisos ? <>
+          {!exito && !spinnerPermisos && !errorPermisos ? <>
             <div className="col-sm-12" style={{ textAlign: "center" }}>
               <input
                 type="submit"

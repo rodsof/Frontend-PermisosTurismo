@@ -28,7 +28,7 @@ const PermisosProvider = (props) => {
                         "type": "Ciudadano",
                         "id": null,
                         "attributes": {
-                            "cuil": permiso.dni,
+                            "cuil": permiso.cuil,
                             "nombre": permiso.nombre,
                             "apellido": permiso.apellido,
                             "nroDoc": permiso.dni,
@@ -44,6 +44,7 @@ const PermisosProvider = (props) => {
 
             }
         } catch (error) {
+            setSpinner(null)
             setError("Hubo un error, intente de nuevo por favor")
         }
         return ciudadanoExiste;
@@ -62,7 +63,11 @@ const PermisosProvider = (props) => {
                 localidad = results.data.localidades[0];
             }
         } catch (error) {
-            console.log(error);
+            setSpinner(null)
+            setError("Hubo un error, intente de nuevo por favor")
+            setTimeout(() => {
+                setError(null)
+            }, 11000);
         }
         return localidad;
     }
@@ -70,46 +75,45 @@ const PermisosProvider = (props) => {
     const getDomicilio = async permiso => {
         var domicilioExiste;
         var urlDomicilios = "/domicilios/"
-        /*    
-        DUDA: preguntar si agregamos domicilios repetidos, chequeamos que la combinacion de calle nro piso depto sea unica?
+        // chequeamos que la combinacion de calle nro piso depto sea unica?
         try {
-                const localidad = permiso.localidad;
-                const calle= permiso.calle;
-                const nro= permiso.nro;
-                const piso= permiso.piso;
-                ciudadanoExiste = await axiosClient.get(urlDomicilios, { params: { localidad, calle, nro, piso, depto } });
-            } catch (error) {
-                setError("Hubo un error, intente de nuevo por favor")
-            } */
+            const localidad = permiso.localidad;
+            const calle = permiso.calle;
+            const nro = permiso.numero;
+            const piso = permiso.piso;
+            const depto = permiso.depto;
+            domicilioExiste = await axiosClient.get(urlDomicilios+"?idLocalidad="+localidad+"&calle="+calle+"&nro="+nro+"&piso="+piso+"&depto="+depto);
+            if (domicilioExiste.data.data.length == 0) {
+                const localidadResults = await getLocalidad(permiso.localidad);
+                const latLocalidad = localidadResults.centroide.lat;
+                const lonLocalidad = localidadResults.centroide.lon;
 
-        //if (domicilioExiste.data.data.length == 0){
-        try {
-            const localidad = await getLocalidad(permiso.localidad);
-            const latLocalidad = localidad.centroide.lat;
-            const lonLocalidad = localidad.centroide.lon;
-
-            const domicilioData = {
-                "data": {
-                    "type": "Domicilio",
-                    "id": null,
-                    "attributes": {
-                        idProvincia: permiso.provincia,
-                        idDepartamento: permiso.departamento,
-                        idLocalidad: permiso.localidad,
-                        latLocalidad: latLocalidad,
-                        longLocalidad: lonLocalidad,
-                        calle: permiso.calle,
-                        nro: permiso.numero,
-                        piso: permiso.piso,
-                        depto: permiso.depto
+                const domicilioData = {
+                    "data": {
+                        "type": "Domicilio",
+                        "id": null,
+                        "attributes": {
+                            idProvincia: permiso.provincia,
+                            idDepartamento: permiso.departamento,
+                            idLocalidad: permiso.localidad,
+                            latLocalidad: latLocalidad,
+                            longLocalidad: lonLocalidad,
+                            calle: permiso.calle,
+                            nro: permiso.numero,
+                            piso: permiso.piso,
+                            depto: permiso.depto
+                        }
                     }
                 }
+                domicilioExiste = await axiosClient.post(urlDomicilios, domicilioData)
             }
-            domicilioExiste = await axiosClient.post(urlDomicilios, domicilioData)
         }
         catch (error) {
             setSpinner(null)
             setError("Hubo un error, intente de nuevo por favor")
+            setTimeout(() => {
+                setError(null)
+            }, 11000);
         }
 
         return domicilioExiste;
@@ -130,10 +134,16 @@ const PermisosProvider = (props) => {
                 linkCiudadano = ciudadanoExiste.data.data[0].links.self;
             else
                 linkCiudadano = ciudadanoExiste.data.data.links.self;
-            if (domicilioExiste.data.data.links.self)
+            if (domicilioExiste.data.data[0])
+                linkDomicilio = domicilioExiste.data.data[0].links.self;
+            else
                 linkDomicilio = domicilioExiste.data.data.links.self;
         } catch (error) {
-
+            setSpinner(null)
+            setError("Hubo un error, intente de nuevo por favor")
+            setTimeout(() => {
+                setError(null)
+            }, 11000);
         }
 
         try {
@@ -153,13 +163,18 @@ const PermisosProvider = (props) => {
             const results = await axiosClient.post(urlPermisos, permisoData);
             setExito("Permiso generado con éxito. Código: " + results.data.data.id + " Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
                 " Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
-            setError(null);
-            setSpinner(null)
+                setError(null);
+                setSpinner(null)
+            setTimeout(() => {
+                setExito(null)
+            }, 11000);
         }
         catch (error) {
-            console.log(error)
             setSpinner(null)
             setError("Hubo un error! Revise los datos de su inscripción")
+            setTimeout(() => {
+                setError(null)
+            }, 11000);
         }
 
     }
@@ -198,7 +213,9 @@ const PermisosProvider = (props) => {
 
     const filtrarPermisos = (data) => {
         savePermisosFiltrados(null);
+        setSpinner(true);
         const permisosSegunEvento = permisos.filter((permiso) => permiso.evento.includes(data.evento) && permiso.fecha.includes(data.fecha));
+        setSpinner(null);
         savePermisosFiltrados(permisosSegunEvento);
         return permisosSegunEvento;
     }
@@ -212,7 +229,8 @@ const PermisosProvider = (props) => {
                 spinnerPermisos,
                 exito,
                 agregarPermiso,
-                filtrarPermisos
+                filtrarPermisos,
+                getCiudadano
             }}
         >
             {props.children}
