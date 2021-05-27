@@ -8,6 +8,7 @@ import Advertencia from "../components/Advertencia";
 import { faCheck, faHome, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PermisosContext } from "../context/permisos/permisosContext";
+import PDFLink from "../components/PDFLink";
 
 
 const formulario = () => {
@@ -530,13 +531,28 @@ const formulario = () => {
           </>
             :
             exito && !spinnerPermisos ?
-              <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}> <span className="exito"><FontAwesomeIcon icon={faCheck} /> {exito}</span></div></div>
+              <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}> <div className="exito"><FontAwesomeIcon icon={faCheck} /> {JSON.parse(exito).ciudadano} su permiso fue generado con éxito. <br />
+            Cuil: {JSON.parse(exito).cuil} <br />
+              Código: {JSON.parse(exito).codigo} <br />
+              Fecha generación: {JSON.parse(exito).fechaGeneracion} <br />
+                <PDFLink
+                  ciudadano={JSON.parse(exito).ciudadano}
+                  cuil={JSON.parse(exito).cuil}
+                  codigo={JSON.parse(exito).codigo}
+                  fecha={JSON.parse(exito).fechaGeneracion}
+                />
+              </div>
+
+              </div>
+
+              </div>
               :
               spinnerPermisos ? <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}><div className="spinner-border text-light" role="status">  <span className="sr-only">Loading...</span></div></div></div>
                 :
                 errorPermisos ? <Error error={errorPermisos} /> : null
 
           }
+
         </div>
       </form>
     </section >

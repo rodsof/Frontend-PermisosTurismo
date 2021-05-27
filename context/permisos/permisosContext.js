@@ -82,7 +82,7 @@ const PermisosProvider = (props) => {
             const nro = permiso.numero;
             const piso = permiso.piso;
             const depto = permiso.depto;
-            domicilioExiste = await axiosClient.get(urlDomicilios+"?idLocalidad="+localidad+"&calle="+calle+"&nro="+nro+"&piso="+piso+"&depto="+depto);
+            domicilioExiste = await axiosClient.get(urlDomicilios + "?idLocalidad=" + localidad + "&calle=" + calle + "&nro=" + nro + "&piso=" + piso + "&depto=" + depto);
             if (domicilioExiste.data.data.length == 0) {
                 const localidadResults = await getLocalidad(permiso.localidad);
                 const latLocalidad = localidadResults.centroide.lat;
@@ -161,13 +161,19 @@ const PermisosProvider = (props) => {
                 }
             }
             const results = await axiosClient.post(urlPermisos, permisoData);
-            setExito("Permiso generado con éxito. Código: " + results.data.data.id + " Para: " + ciudadanoExiste.data.data[0].attributes.nombre + " " + ciudadanoExiste.data.data[0].attributes.apellido +
-                " Fecha de generación: " + results.data.data.attributes.fechaGeneracion);
-                setError(null);
-                setSpinner(null)
+            const exito = {
+                "codigo": results.data.data.id,
+                "fechaGeneracion": results.data.data.attributes.fechaGeneracion,
+                "ciudadano": permiso.nombre + " " + permiso.apellido,
+                "cuil": permiso.cuil
+            }
+            setExito(JSON.stringify(exito));
             setTimeout(() => {
                 setExito(null)
             }, 11000);
+            setError(null);
+            setSpinner(null)
+
         }
         catch (error) {
             setSpinner(null)
