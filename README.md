@@ -1,6 +1,6 @@
 # Frontend-PermisosTurismo
 
-Hola! Este repositorio contiene el código del Frontend desarrollado para resolver la consigna del Tema 2 del Primer Parcial de Sistemas Distribuidos II. Este es un proyecto de [Next.js] (https://nextjs.org/) iniciado con [`create-next-app`] (https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Hola! Este repositorio contiene el código del Frontend desarrollado para resolver la consigna del Tema 2 del Primer Parcial de Sistemas Distribuidos II. Este es un proyecto de [Next.js] (https://nextjs.org/) iniciado con [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Comenzando 🚀
 
