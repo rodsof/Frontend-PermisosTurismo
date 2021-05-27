@@ -74,7 +74,7 @@ Se podrá acceder al servidor acciendo a http://localhost:3000 en el navegador
 * [npm](https://www.npmjs.com/) -  Manejador de dependencias
 * [Bootstrap 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/) - Framework CSS para el diseño responsive del sitio
 * [Formik](https://formik.org/) - Librería para gestión de formularios
-* [Yup](https://github.com/jquense/yup  - Librería para definir esquemas de validación de formularios
+* [Yup](https://github.com/jquense/yup)  - Librería para definir esquemas de validación de formularios
 * [Google Map React](https://www.npmjs.com/package/google-map-react) - Permite renderizar mapas de Google Maps
 * [Axios](https://axios-http.com/) - Cliente HTTP para Javascript
 * [Font Awesome](https://fontawesome.com/) - Framework de iconos vectoriales
