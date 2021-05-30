@@ -46,7 +46,7 @@ Estas dependencias de npm podrán ser instaladas con una sola línea de comando 
 npm install
 ```
 Consumo de APIs:
-https://datosgobar.github.io/georef-ar-api/
+* [Georef-ar-api](https://datosgobar.github.io/georef-ar-api/)
 
 ### Instalación 🔧
 
