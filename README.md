@@ -39,6 +39,7 @@ Dependencias del proyecto:
     react
     react-dom
     yup
+    react-pdf
 ```
 Estas dependencias de npm podrán ser instaladas con una sola línea de comando luego de clonar el proyecto.
 
@@ -80,6 +81,7 @@ Se podrá acceder al servidor acciendo a http://localhost:3000 en el navegador
 * [Google Map React](https://www.npmjs.com/package/google-map-react) - Permite renderizar mapas de Google Maps
 * [Axios](https://axios-http.com/) - Cliente HTTP para Javascript
 * [Font Awesome](https://fontawesome.com/) - Framework de iconos vectoriales
+* [React-PDF](https://react-pdf.org/) - Librería para generar archivos pdf
 
 ## API consumida:
 [API del Servicio de Normalización de Datos Geográficos de Argentina](https://datosgobar.github.io/georef-ar-api/)
