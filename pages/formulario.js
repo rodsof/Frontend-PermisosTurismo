@@ -42,7 +42,6 @@ const formulario = () => {
   // Cambio de localidad
   const cambioLocalidad = (e) => {
     getDirecciones(e.target.value);
-    console.log(direcciones)
   }
   // Validación del formulario usando formik y yup
   const formik = useFormik({
@@ -73,7 +72,6 @@ const formulario = () => {
     onSubmit: (data, resetForm) => {
       agregarPermiso(data);
       if (exito) {
-        console.log(exito)
         resetForm();
       }
     },

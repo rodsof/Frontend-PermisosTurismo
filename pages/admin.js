@@ -1,4 +1,4 @@
-import { faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFormik } from "formik";
 import React, { useContext } from 'react';
@@ -19,7 +19,6 @@ const admin = () => {
     // Validación del formulario usando formik y yup
     const formik = useFormik({
         initialValues: {
-            evento: "",
             fecha: ""
         },
         onSubmit: (data) => {
@@ -45,6 +44,8 @@ const admin = () => {
                             className="form-select"
                             id="evento"
                             defaultValue="default"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="default" disabled>Seleccione</option>
                             {eventos.map((evento) =>
@@ -70,6 +71,9 @@ const admin = () => {
                             type="date"
                             className="form-control"
                             id="fecha"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.fecha}
                         />
 
                     </div>
@@ -87,7 +91,7 @@ const admin = () => {
             { permisosFiltrados ?
                 permisosFiltrados.length > 0 ?
                     <>
-                        <div className="row"><div className="col-sm-12" style={{ textAlign: "center", marginBottom: ".5rem" }}><span> <FontAwesomeIcon icon={faMapMarkerAlt} color="red"/> Haga click sobre los marcadores para conocer la cantidad de permisos tramitados en cada localidad</span></div></div>
+                        <div className="row"><div className="col-sm-12" style={{ textAlign: "center", marginBottom: ".5rem" }}><span> <FontAwesomeIcon icon={faMapMarkerAlt} color="red" /> Haga click sobre los marcadores para conocer la cantidad de permisos tramitados en cada localidad</span></div></div>
                         <Mapa permisos={permisosFiltrados} />
                     </>
                     : <div className="row"><div className="col-sm-12" style={{ textAlign: "center" }}><span>No hay permisos para ese evento en la fecha indicada</span></div></div>

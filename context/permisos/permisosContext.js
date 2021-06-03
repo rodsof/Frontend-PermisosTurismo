@@ -223,7 +223,6 @@ const PermisosProvider = (props) => {
         const permisosSegunEvento = permisos.filter((permiso) => permiso.evento.includes(data.evento) && permiso.fecha.includes(data.fecha));
         setSpinner(null);
         savePermisosFiltrados(permisosSegunEvento);
-        return permisosSegunEvento;
     }
 
     return (
