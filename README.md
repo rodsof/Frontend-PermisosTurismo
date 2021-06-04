@@ -92,7 +92,7 @@ Se podrá acceder al servidor acciendo a http://localhost:3000 en el navegador
 
 
 ## Links relacionados 🔖
-* Código Backend: https://github.com/rodsof/Frontend-PermisosTurismo.git
+* Código Backend: https://github.com/rodsof/Backend-PermisosTurismo/
 * Acceso a la API: http://permisosturismo.herokuapp.com/
 * Deploy del proyectp: https://frontend-permisos-turismo.vercel.app/
 
